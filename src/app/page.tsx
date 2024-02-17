@@ -2,11 +2,15 @@ import Game from "./client/game";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between gap-8 p-4">
-      <div className="flex text-4xl text-bold text-center">
-        Wordle Racer
-      </div>
-      <Game />
-    </main>
+    <div className="m-0 p-0">
+      <main className="absolute w-full h-full top-0 left-0">
+        <div className="h-full pt-2">
+          <div className="flex justify-center text-4xl font-bold text-center h-[40px]">
+            Wordle Racer
+          </div>
+          <Game />
+        </div>
+      </main>
+    </div>
   );
 }

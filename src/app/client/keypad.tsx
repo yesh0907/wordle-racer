@@ -1,17 +1,24 @@
 'use client';
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Key from "./key";
+import { GameContext, GridCell } from "./game";
 
 export default function Keypad() {
-    const [letters, setLetters] = useState<string[]>([]);
+    const { currGuess, grid, updateGrid } = useContext(GameContext);
+    const currRow = grid[currGuess];
+    const idx = 0;
 
     const handleKeyClick = (letter: string) => {
-        setLetters([...letters, letter]);
+        // handle click not working
+        currRow[idx].value = letter;
+        console.log(currRow);
+        updateGrid(currGuess, currRow);
     };
 
     const handleBackspace = () => {
-        setLetters(letters.slice(0, -1));
+        currRow[idx].value = "";
+        updateGrid(currGuess, currRow);
     };
 
     const handleEnter = () => {
@@ -19,31 +26,37 @@ export default function Keypad() {
     };
 
     return (
-        <div className="w-full flex flex-wrap justify-center flex-shrink min-w-0 gap-2">
-            <div className="flex gap-2 flex-shrink min-w-0">
+        <div className="h-[200px] my-0 mx-[8px] select-none">
+            <div className="flex w-full mt-0 mb-2 mx-auto touch-manipulation">
                 {'QWERTYUIOP'.split('').map((letter) => (
-                    <Key key={letter} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={letter === 'P'} letter={letter} onClick={handleKeyClick} />
                 ))}
             </div>
-            <div className="flex gap-2 flex-shrink min-w-0">
+            <div className="flex w-full mt-0 mb-2 mx-auto touch-manipulation">
+                <div className="flex-[0.5]"></div>
                 {'ASDFGHJKL'.split('').map((letter) => (
-                    <Key key={letter} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={letter === 'L'} letter={letter} onClick={handleKeyClick} />
                 ))}
+                <div className="flex-[0.5] m-0 p-0 border-0" />
             </div>
-            <div className="flex gap-2 flex-shrink min-w-0">
+            <div className="flex w-full mt-0 mb-2 mx-auto touch-manipulation">
                 <button
                     type="button"
-                    className="w-1/4 h-12 bg-green-500 hover:bg-green-600 text-white text-md font-bold rounded-md text-center"
+                    className="text-[12px] font-bold mr-2 my-0 ml-0 p-0 flex-[1.5]
+                    h-[58px] rounded cursor-pointer select-none bg-green-500
+                    flex justify-center items-center uppercase"
                     onClick={handleEnter}
                 >
                     Enter
                 </button>
                 {'ZXCVBNM'.split('').map((letter) => (
-                    <Key key={letter} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={false} letter={letter} onClick={handleKeyClick} />
                 ))}
                 <button
                     type="button"
-                    className="w-1/4 h-12 bg-gray-700 hover:bg-gray-500 flex items-center justify-center rounded-md"
+                    className="text-[12px] font-bold m-0 p-0 flex-[1.5]
+                    h-[58px] rounded cursor-pointer select-none bg-gray-700
+                    flex justify-center items-center uppercase"
                     onClick={handleBackspace}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

@@ -13,8 +13,8 @@ export default function Cell({ data }: CellProps) {
         bg = 'bg-transparent';
     }
     return (
-        <div className={`min-w-0 w-[56px] h-[56px] border-2 border-solid border-gray-400 bg-transparent flex items-center justify-center`}>
-            {value.length > 0 ? value : 'A'}
+        <div className='w-full inline-flex justify-center items-center text-3xl leading-none font-bold align-middle box-border uppercase border-2 border-solid border-gray-300'>
+            {value}
         </div>
     )
 }
