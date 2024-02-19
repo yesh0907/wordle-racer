@@ -1,41 +1,54 @@
 'use client';
 
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Key from "./key";
-import { GameContext, GridCell } from "./game";
+import { GameContext } from "./game";
 
 export default function Keypad() {
-    const { currGuess, grid, updateGrid } = useContext(GameContext);
+    const { currGuess, grid, updateGrid, WORD_SIZE, GRID_SIZE, checkGuess } = useContext(GameContext);
     const currRow = grid[currGuess];
-    const idx = 0;
+    const idx = useRef(0);
+    const [usedLetters, setUsedLetters] = useState<string[]>([]);
 
     const handleKeyClick = (letter: string) => {
-        // handle click not working
-        currRow[idx].value = letter;
-        console.log(currRow);
+        if (idx.current === WORD_SIZE || currGuess === GRID_SIZE) return;
+        currRow[idx.current].value = letter;
         updateGrid(currGuess, currRow);
+        idx.current++;
     };
 
     const handleBackspace = () => {
-        currRow[idx].value = "";
+        if (idx.current === 0) return;
+        idx.current--;
+        currRow[idx.current].value = "";
         updateGrid(currGuess, currRow);
     };
 
     const handleEnter = () => {
         // Handle submitting the word
+        const letters = grid[currGuess].map(({ value }) => value);
+        const guess = letters.join('');
+        if (guess.length === 0) return;
+        checkGuess(guess);
+        idx.current = 0;
+        setUsedLetters((prev) => [...prev, ...letters]);
     };
 
     return (
         <div className="h-[200px] my-0 mx-[8px] select-none">
             <div className="flex w-full mt-0 mb-2 mx-auto touch-manipulation">
                 {'QWERTYUIOP'.split('').map((letter) => (
-                    <Key key={letter} isLast={letter === 'P'} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={letter === 'P'}
+                        letter={letter} onClick={handleKeyClick}
+                        isUsed={usedLetters.includes(letter)} />
                 ))}
             </div>
             <div className="flex w-full mt-0 mb-2 mx-auto touch-manipulation">
                 <div className="flex-[0.5]"></div>
                 {'ASDFGHJKL'.split('').map((letter) => (
-                    <Key key={letter} isLast={letter === 'L'} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={letter === 'L'}
+                        letter={letter} onClick={handleKeyClick} 
+                        isUsed={usedLetters.includes(letter)} />
                 ))}
                 <div className="flex-[0.5] m-0 p-0 border-0" />
             </div>
@@ -50,12 +63,14 @@ export default function Keypad() {
                     Enter
                 </button>
                 {'ZXCVBNM'.split('').map((letter) => (
-                    <Key key={letter} isLast={false} letter={letter} onClick={handleKeyClick} />
+                    <Key key={letter} isLast={false} 
+                        letter={letter} onClick={handleKeyClick}
+                        isUsed={usedLetters.includes(letter)} />
                 ))}
                 <button
                     type="button"
                     className="text-[12px] font-bold m-0 p-0 flex-[1.5]
-                    h-[58px] rounded cursor-pointer select-none bg-gray-700
+                    h-[58px] rounded cursor-pointer select-none bg-gray-500
                     flex justify-center items-center uppercase"
                     onClick={handleBackspace}
                 >
