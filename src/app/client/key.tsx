@@ -1,5 +1,3 @@
-'use client';
-
 interface KeyProps {
     letter: string;
     isLast: boolean;

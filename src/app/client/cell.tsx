@@ -1,6 +1,6 @@
 "use client";
 
-import { GRID_STATE, GridCell } from "./game";
+import { GridCell, GRID_STATE } from "@/game/constants";
 
 interface CellProps {
     data: GridCell,

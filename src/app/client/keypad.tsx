@@ -2,7 +2,7 @@
 
 import { useContext, useRef, useState } from "react";
 import Key from "./key";
-import { GameContext } from "./game";
+import { GameContext } from "@/game/state";
 
 export default function Keypad() {
     const { currGuess, grid, updateGrid, WORD_SIZE, GRID_SIZE, checkGuess } = useContext(GameContext);
@@ -25,7 +25,7 @@ export default function Keypad() {
     };
 
     const handleEnter = () => {
-        // Handle submitting the word
+        if (idx.current != WORD_SIZE) return;
         const letters = grid[currGuess].map(({ value }) => value);
         const guess = letters.join('');
         if (guess.length === 0) return;
@@ -47,7 +47,7 @@ export default function Keypad() {
                 <div className="flex-[0.5]"></div>
                 {'ASDFGHJKL'.split('').map((letter) => (
                     <Key key={letter} isLast={letter === 'L'}
-                        letter={letter} onClick={handleKeyClick} 
+                        letter={letter} onClick={handleKeyClick}
                         isUsed={usedLetters.includes(letter)} />
                 ))}
                 <div className="flex-[0.5] m-0 p-0 border-0" />
@@ -63,7 +63,7 @@ export default function Keypad() {
                     Enter
                 </button>
                 {'ZXCVBNM'.split('').map((letter) => (
-                    <Key key={letter} isLast={false} 
+                    <Key key={letter} isLast={false}
                         letter={letter} onClick={handleKeyClick}
                         isUsed={usedLetters.includes(letter)} />
                 ))}
