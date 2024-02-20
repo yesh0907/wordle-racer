@@ -19,7 +19,7 @@ export default function Cell({ data }: CellProps) {
         bg = 'bg-transparent';
     }
     return (
-        <div className={`w-ful inline-flex justify-center items-center text-3xl\
+        <div className={`w-full inline-flex justify-center items-center text-3xl\
             leading-none font-bold align-middle box-border uppercase border-2\
             border-solid border-gray-300 ${bg}`}>
             {value}

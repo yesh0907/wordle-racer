@@ -1,69 +1,76 @@
-import db from "@/db/config";
-import { GameConverter } from "@/db/utils";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import Game from "./client/game";
-import { WORD_SIZE } from "@/game/constants";
+export default function Home() {
+    const today = new Date();
+    const dd = today.getDate();
+    const mm = today.getMonth(); //January is 0!
+    const yyyy = today.getFullYear();
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
 
-async function getWord(gameId: string) {
-  // check if game ID exists in DB
-  try {
-    const docRef = doc(db, "games", gameId).withConverter(GameConverter);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      // set word
-      const {word} = docSnap.data();
-      console.log(`got word from db for game ${gameId}: ${word}`);
-      return word;
-    }
-  } catch (e) {
-    console.error(`get data from db error - ${e}`);
-  }
+    const todaysDateStr = monthNames[mm] + ' ' + dd + ', ' + yyyy;
 
-  // did not get word from db, generate word and store in db 
-  try {
-    const res = await fetch(
-      `https://random-word-api.herokuapp.com/word?length=${WORD_SIZE}`,
-      {
-        mode: "cors",
-      }
-    );
-    if (res.ok) {
-      const data: string[] = await res.json();
-      const word = (data[0] ?? "").toUpperCase();
-      // add to db
-      const ref = doc(db, "games", gameId).withConverter(GameConverter);
-      await setDoc(ref, {word});
-      console.log(`got word for game ${gameId}: ${word}`);
-      return word;
-    }
-  } catch (e) {
-    console.error(`fetch word: ${e}`);
-  }
-  return "";
-}
-
-/*
-todo:
-- assign playerId in state by generating UUID
-- create game page (set player1 id when creating game)
-- join room functionality (use queryParam of player=2 to set respective playerId)
-- sub to progress from firebase and update state according to progress (check when opp wins)
-- refine game over screen based on Yael's design
-*/
-
-export default async function Home() {
-  const gameId = '1234';
-  const word = await getWord(gameId);
-  return (
-    <div className="m-0 p-0">
-      <main className="absolute w-full h-full top-0 left-0">
-        <div className="h-full pt-2">
-          <div className="flex justify-center text-4xl font-bold text-center h-[40px]">
-            Wordle Racer
-          </div>
-          <Game gameId={gameId} word={word} />
-        </div>
-      </main>
-    </div>
-  );
+    return (
+        <main className="flex flex-col w-screen h-screen">
+            <div className="w-full h-1/6" />
+            <div className="flex flex-col mx-auto items-center flex-1 p-2 gap-14">
+                <div className="flex flex-col gap-3">
+                    <div className="text-center text-white text-3xl font-bold">
+                        Wordle Racer
+                    </div>
+                    <div className="flex text-center text-white text-base font-light">
+                        Race against your friends in the Wordle
+                    </div>
+                </div>
+                <div className="flex flex-col items-center gap-3">
+                    <div className="text-center text-white text-xl font-semibold">
+                        Enter Game Code
+                    </div>
+                    <form className="flex flex-col gap-4 items-center">
+                        <div className="flex gap-4 w-3/4 justify-center h-14">
+                            <input
+                                type="number"
+                                maxLength={1}
+                                className={`w-14 inline-flex justify-center items-center text-3xl\
+                            text-center leading-none font-bold align-middle box-border\
+                            bg-neutral-200 text-black`} />
+                            <input
+                                type="text"
+                                className={`w-14 inline-flex justify-center items-center text-3xl\
+                            text-center leading-none font-bold align-middle box-border\
+                            bg-neutral-200 text-black`} />
+                            <input
+                                type="text"
+                                className={`w-14 inline-flex justify-center items-center text-3xl\
+                            text-center leading-none font-bold align-middle box-border\
+                            bg-neutral-200 text-black`} />
+                            <input
+                                type="text"
+                                className={`w-14 inline-flex justify-center items-center text-3xl\
+                            text-center leading-none font-bold align-middle box-border\
+                            bg-neutral-200 text-black`} />
+                        </div>
+                        <button 
+                            className="rounded-full border border-neutral-200 px-6 py-2"
+                            type="submit">
+                            Join Game
+                        </button>
+                    </form>
+                </div>
+                <div className="flex flex-col gap-6">
+                    <div className="bg-neutral-200 rounded-full px-6 py-2">
+                        <div className="text-center text-black text-lg font-normal">
+                            Start game
+                        </div>
+                    </div>
+                    <div className="rounded-full border border-neutral-200 px-6 py-2">
+                        <div className="text-center text-white text-lg font-normal">
+                            How to play
+                        </div>
+                    </div>
+                </div>
+                <div className="text-center text-white text-base font-bold">
+                    {todaysDateStr}
+                </div>
+            </div>
+        </main>
+    )
 }

@@ -2,7 +2,7 @@
 
 import { GameContext } from "@/game/state";
 import { useContext, useEffect } from "react";
-import { cleanUpGame } from "../actions/clean-up-game";
+import { cleanUpGame } from "../../actions/clean-up-game";
 
 interface GameOverProps {
     didWin: boolean;

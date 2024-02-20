@@ -2,13 +2,8 @@ import { QueryDocumentSnapshot } from "firebase/firestore";
 
 export interface IGame {
     word: string;
-    player1?: {
-        id: string;
-        progress: number;
-    };
-    player2?: {
-        id: string;
-        progress: number;
+    progress?: {
+        [playerId: string]: number;
     }
 };
 
