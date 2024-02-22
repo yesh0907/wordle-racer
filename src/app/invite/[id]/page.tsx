@@ -1,5 +1,17 @@
-export default function InvitePage({ params }: { params: { id: string } }) {
-    const gameId = params.id.split("").map((token, idx) => {
+import { claimPlayerId } from "@/app/actions/claim-player-id";
+import { redirect } from "next/navigation";
+
+export default async function InvitePage({ params }: { params: { id: string } }) {
+    const gameId = params.id;
+    const playerId = await claimPlayerId(gameId);
+    if (!playerId) redirect('/');
+
+    // subscribe to db's state about game's status
+    const startGame = () => {
+        redirect(`/game/${gameId}?id=${playerId}`);
+    }
+
+    const gameIdUI = gameId.split("").map((token, idx) => {
         return (
             <div key={idx} className={`w-14 inline-flex justify-center items-center text-3xl\
             leading-none font-bold align-middle box-border bg-neutral-200 text-black`}>
@@ -28,9 +40,9 @@ export default function InvitePage({ params }: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="flex gap-4 w-3/4 justify-center h-14">
-                    {gameId}
+                    {gameIdUI}
                 </div>
-                <div className="flex flex-col gap-3">
+                {/* <div className="flex flex-col gap-3">
                     <div className="text-center text-white text-lg">
                         Share via:
                     </div>
@@ -39,7 +51,7 @@ export default function InvitePage({ params }: { params: { id: string } }) {
                             Copy Link
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </main>
     );

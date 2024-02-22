@@ -2,9 +2,10 @@ import { QueryDocumentSnapshot } from "firebase/firestore";
 
 export interface IGame {
     word: string;
-    progress?: {
+    progress: {
         [playerId: string]: number;
-    }
+    },
+    playerIds: {[id: string]: {claimed: boolean}}[],
 };
 
 export const GameConverter = {

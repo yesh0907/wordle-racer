@@ -23,7 +23,7 @@ export const initGameState: IGameState = {
     word: '',
     checkGuess: () => { },
     gameId: '',
-    playerId: 'a'
+    playerId: ''
 };
 
 export const GameContext = createContext(initGameState);

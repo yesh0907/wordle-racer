@@ -10,9 +10,10 @@ import { GridCell, GRID_STATE, GRID_SIZE } from "@/game/constants";
 interface GameProps {
     gameId: string;
     word: string;
+    playerId: string;
 }
 
-export default function Game({ gameId, word }: GameProps) {
+export default function Game({ gameId, word, playerId }: GameProps) {
     const [grid, setGrid] = useState(initGameState.grid);
     const [currGuess, setCurrGuess] = useState(0);
     const [didWin, setDidWin] = useState(false);
@@ -66,11 +67,13 @@ export default function Game({ gameId, word }: GameProps) {
         setCurrGuess((prev) => prev + 1);
     }
 
+    console.log(playerId);
+
     // game max width: 500px, height of header is 40px
     return (
         <GameContext.Provider value={{
             ...initGameState, grid, updateGrid, checkGuess,
-            currGuess, word, gameId,
+            currGuess, word, gameId, playerId,
         }}>
             <div className="w-full max-w-[500px] my-0 mx-auto h-[calc(100%-40px)] flex flex-col">
                 <Grid />

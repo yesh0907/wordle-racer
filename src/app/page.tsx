@@ -1,3 +1,6 @@
+import { createGame } from "./actions/create-game";
+import { joinGame } from "./actions/join-game";
+
 export default function Home() {
     const today = new Date();
     const dd = today.getDate();
@@ -24,29 +27,36 @@ export default function Home() {
                     <div className="text-center text-white text-xl font-semibold">
                         Enter Game Code
                     </div>
-                    <form className="flex flex-col gap-4 items-center">
+                    <form action={joinGame} className="flex flex-col gap-4 items-center">
                         <div className="flex gap-4 w-3/4 justify-center h-14">
                             <input
-                                type="number"
+                                name="val1"
+                                type="text"
                                 maxLength={1}
                                 className={`w-14 inline-flex justify-center items-center text-3xl\
-                            text-center leading-none font-bold align-middle box-border\
-                            bg-neutral-200 text-black`} />
+                                text-center leading-none font-bold align-middle box-border\
+                                bg-neutral-200 text-black`} />
                             <input
+                                name="val2"
                                 type="text"
+                                maxLength={1}
                                 className={`w-14 inline-flex justify-center items-center text-3xl\
-                            text-center leading-none font-bold align-middle box-border\
-                            bg-neutral-200 text-black`} />
+                                text-center leading-none font-bold align-middle box-border\
+                                bg-neutral-200 text-black`} />
                             <input
+                                name="val3"
                                 type="text"
+                                maxLength={1}
                                 className={`w-14 inline-flex justify-center items-center text-3xl\
-                            text-center leading-none font-bold align-middle box-border\
-                            bg-neutral-200 text-black`} />
+                                text-center leading-none font-bold align-middle box-border\
+                                bg-neutral-200 text-black`} />
                             <input
+                                name="val4"
                                 type="text"
+                                maxLength={1}
                                 className={`w-14 inline-flex justify-center items-center text-3xl\
-                            text-center leading-none font-bold align-middle box-border\
-                            bg-neutral-200 text-black`} />
+                                text-center leading-none font-bold align-middle box-border\
+                                bg-neutral-200 text-black`} />
                         </div>
                         <button 
                             className="rounded-full border border-neutral-200 px-6 py-2"
@@ -56,11 +66,16 @@ export default function Home() {
                     </form>
                 </div>
                 <div className="flex flex-col gap-6">
-                    <div className="bg-neutral-200 rounded-full px-6 py-2">
-                        <div className="text-center text-black text-lg font-normal">
+                    <form
+                        action={createGame}
+                        className="bg-neutral-200 rounded-full px-6 py-2"
+                    >
+                        <button
+                            type="submit"
+                            className="text-center text-black text-lg font-normal">
                             Start game
-                        </div>
-                    </div>
+                        </button>
+                    </form>
                     <div className="rounded-full border border-neutral-200 px-6 py-2">
                         <div className="text-center text-white text-lg font-normal">
                             How to play

@@ -45,9 +45,9 @@ export default function Grid() {
     }, [grid, currGuess]);
 
     return (
-        <div className="flex justify-start flex-grow overflow-hidden px-2">
+        <div ref={gridRef} className="flex items-center justify-center flex-grow overflow-hidden px-2">
             <Progress height={height} isPlayer ratio={greens / WORD_SIZE} />
-            <div ref={gridRef} className="flex justify-center items-center flex-grow overflow-hidden">
+            <div className="flex justify-center items-center flex-grow overflow-hidden">
                 <div
                     className="grid grid-rows-6 gap-1 p-2 box-border"
                     style={{ width, height }}
