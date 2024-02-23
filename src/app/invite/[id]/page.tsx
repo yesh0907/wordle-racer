@@ -1,15 +1,11 @@
 import { claimPlayerId } from "@/app/actions/claim-player-id";
 import { redirect } from "next/navigation";
+import GameStatus from "./game-status";
 
 export default async function InvitePage({ params }: { params: { id: string } }) {
     const gameId = params.id;
     const playerId = await claimPlayerId(gameId);
     if (!playerId) redirect('/');
-
-    // subscribe to db's state about game's status
-    const startGame = () => {
-        redirect(`/game/${gameId}?id=${playerId}`);
-    }
 
     const gameIdUI = gameId.split("").map((token, idx) => {
         return (
@@ -42,6 +38,7 @@ export default async function InvitePage({ params }: { params: { id: string } })
                 <div className="flex gap-4 w-3/4 justify-center h-14">
                     {gameIdUI}
                 </div>
+                <GameStatus gameId={gameId} playerId={playerId} />
                 {/* <div className="flex flex-col gap-3">
                     <div className="text-center text-white text-lg">
                         Share via:

@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 
 /*
 todo:
-- join room functionality (getWord, generate playerID and set progress for player in db)
-- sub to progress from firebase and update state according to progress (check when opp wins)
 - refine game over screen based on Yael's design
 */
 

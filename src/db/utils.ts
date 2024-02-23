@@ -6,6 +6,7 @@ export interface IGame {
         [playerId: string]: number;
     },
     playerIds: {[id: string]: {claimed: boolean}}[],
+    active: boolean;
 };
 
 export const GameConverter = {

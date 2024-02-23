@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { claimPlayerId } from "./claim-player-id";
+import { createPlayerForExistingGame } from "./create-player";
 
 export async function joinGame(formData: FormData) {
   let gameId = "";
@@ -10,7 +10,7 @@ export async function joinGame(formData: FormData) {
   }
   if (gameId.length > 4) redirect('/');
 
-  const playerId = await claimPlayerId(gameId, true);
+  const playerId = await createPlayerForExistingGame(gameId);
   if (playerId) {
     redirect(`/game/${gameId}?id=${playerId}`);
   } else {

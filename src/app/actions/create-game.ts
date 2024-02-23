@@ -38,7 +38,8 @@ export async function createGame() {
         },
         playerIds: [
             {[playerId]: { claimed: false }}
-        ]
+        ],
+        active: false,
     };
     await setDoc(ref, gameData);
 

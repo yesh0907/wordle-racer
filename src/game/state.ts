@@ -12,6 +12,7 @@ export interface IGameState {
     checkGuess: (guess: string) => void,
     gameId: string,
     playerId: string,
+    oppScore: number,
 }
 
 export const initGameState: IGameState = {
@@ -23,7 +24,8 @@ export const initGameState: IGameState = {
     word: '',
     checkGuess: () => { },
     gameId: '',
-    playerId: ''
+    playerId: '',
+    oppScore: 0,
 };
 
 export const GameContext = createContext(initGameState);

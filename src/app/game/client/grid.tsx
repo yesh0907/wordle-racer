@@ -11,7 +11,7 @@ const heightFactor = 2;
 const defaultWidth = 300;
 
 export default function Grid() {
-    const { grid, currGuess } = useContext(GameContext);
+    const { grid, currGuess, oppScore } = useContext(GameContext);
     const gridRef = useRef<HTMLDivElement>(null);
     const [windowSize, setWindowSize] = useState([0, 0]);
     const [width, setWidth] = useState(0);
@@ -61,7 +61,7 @@ export default function Grid() {
                     ))}
                 </div>
             </div>
-            <Progress height={height} ratio={1 / 5} />
+            <Progress height={height} ratio={oppScore / WORD_SIZE} />
         </div>
     )
 }

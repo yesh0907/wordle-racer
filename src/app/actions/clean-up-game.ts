@@ -1,10 +1,10 @@
 'use server'
 
 import db from "@/db/config";
-import { deleteDoc, doc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 export async function cleanUpGame(gameId: string) {
-    // delete word
-    const docRef = doc(db, "games", gameId);
-    await deleteDoc(docRef);
+    // deactivate game
+    const ref = doc(db, "games", gameId);
+    await setDoc(ref, { active: false }, { merge: true });
 }
