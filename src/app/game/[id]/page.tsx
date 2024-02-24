@@ -2,11 +2,6 @@ import Game from "../client/game";
 import { getGameData } from "@/app/actions/get-game-data";
 import { redirect } from "next/navigation";
 
-/*
-todo:
-- refine game over screen based on Yael's design
-*/
-
 export default async function GamePage({
   params,
   searchParams,
@@ -18,15 +13,29 @@ export default async function GamePage({
   const gameData = await getGameData(gameId);
 
   // game does not exist
-  if (!gameData) redirect('/');
+  if (!gameData) {
+    console.error(`GamePage error: game ${gameId} - game does not exist`);
+    redirect('/?error=GamePage&msg=invalid-gameId');
+  }
   const {word, playerIds} = gameData;
 
   const playerId = searchParams['id'];
 
   // playerId is undefined or string[]
-  if (!playerId || Array.isArray(playerId)) redirect('/');
+  if (!playerId || Array.isArray(playerId)) {
+    if (!playerId) {
+      console.error(`GamePage error: game ${gameId} - player ${playerId} was undefined`);
+      redirect('/?error=GamePage&msg=playerId-null');
+    } else {
+      console.error(`GamePage error: game ${gameId} - player ${playerId} was an array`);
+      redirect('/?error=GamePage&msg=playerId-isArr')
+    }
+  }
   // check if playerId exists
-  if (playerIds.filter((obj) => obj[playerId]).length !== 1) redirect('/');
+  if (playerIds.filter((obj) => obj[playerId] != null).length !== 1) {
+    console.error(`GamePage error: game ${gameId} - player ${playerId} is not a player in ${JSON.stringify(playerIds)}`);
+    redirect('/?error=GamePage&msg=playerId-invalid');
+  }
 
   return (
     <main className="absolute w-full h-full top-0 left-0">

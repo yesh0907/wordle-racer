@@ -9,6 +9,8 @@ import { GridCell, GRID_STATE, GRID_SIZE, WORD_SIZE } from "@/game/constants";
 import { updateProgress } from "@/app/actions/update-progress";
 import { getOppProgress } from "@/app/actions/get-opp-progress";
 import { useRouter } from "next/navigation";
+import { genEmptyGridState } from "@/game/utils";
+import { getGameStatus } from "@/app/actions/get-game-status";
 
 interface GameProps {
     gameId: string;
@@ -18,7 +20,7 @@ interface GameProps {
 
 export default function Game({ gameId, word, playerId }: GameProps) {
     const router = useRouter();
-    const [grid, setGrid] = useState(initGameState.grid);
+    const [grid, setGrid] = useState(genEmptyGridState(GRID_SIZE, WORD_SIZE));
     const [currGuess, setCurrGuess] = useState(0);
     const [didWin, setDidWin] = useState(false);
     const [gameOver, setGameOver] = useState(false);
@@ -78,6 +80,33 @@ export default function Game({ gameId, word, playerId }: GameProps) {
     }
 
     useEffect(() => {
+        const checkGameStatus = async () => {
+            if (!gameOver) {
+                const gameStatus = await getGameStatus(gameId);
+                if (gameStatus == null) {
+                    console.error(`game ${gameId} does not exist`);
+                    router.push('/');
+                } else {
+                    // game is inactive
+                    if (!gameStatus) {
+                        setGameOver(true);
+                        clearInterval(pollingInterval);
+                    }
+                }
+            }
+        }
+
+        const pollingInterval = setInterval(checkGameStatus, 2000);
+        if (gameOver) {
+            clearInterval(pollingInterval);
+        }
+
+        return () => {
+            clearInterval(pollingInterval);
+        }
+    }, [gameId, gameOver, router]);
+
+    useEffect(() => {
         const updateOppProgress = async () => {
             if (!gameOver) {
                 const oppProgress = await getOppProgress(gameId, playerId);
@@ -92,7 +121,7 @@ export default function Game({ gameId, word, playerId }: GameProps) {
                 }
             }
         }
-        
+
         const pollingInterval = setInterval(updateOppProgress, 1000);
         if (gameOver) {
             clearInterval(pollingInterval);

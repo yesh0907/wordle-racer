@@ -13,7 +13,8 @@ export async function getOppProgress(gameId: string, playerId: string) {
             return progress[oppPlayerId];
         }
     } catch (_) {
-        console.error('no opponent');
+        console.error(`getOppProgress error: no opponent for game ${gameId}`);
+        console.error(gameData);
     }
     return null;
 }

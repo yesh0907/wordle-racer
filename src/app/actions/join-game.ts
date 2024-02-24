@@ -8,12 +8,14 @@ export async function joinGame(formData: FormData) {
   for (let i = 1; i < 5; i++) {
     gameId += `${formData.get(`val${i}`)}`;
   }
-  if (gameId.length > 4) redirect('/');
+  if (gameId.length > 4) {
+    redirect('/?error=joinGame&msg=gameId-len');
+  }
 
   const playerId = await createPlayerForExistingGame(gameId);
   if (playerId) {
     redirect(`/game/${gameId}?id=${playerId}`);
   } else {
-    redirect('/');
+    redirect('/?error=joinGame&msg=playerId-null');
   }
 }
