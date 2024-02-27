@@ -14,7 +14,7 @@ export async function joinGame(formData: FormData) {
 
   const playerId = await createPlayerForExistingGame(gameId);
   if (playerId) {
-    redirect(`/game/${gameId}?id=${playerId}`);
+    redirect(`/game/${gameId}?playerId=${playerId}`);
   } else {
     redirect('/?error=joinGame&msg=playerId-null');
   }

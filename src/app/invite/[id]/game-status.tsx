@@ -33,7 +33,7 @@ export default function GameStatus({ gameId, playerId }: GameStatusProps) {
 
     useEffect(() => {
         if (active) {
-            router.push(`/game/${gameId}?id=${playerId}`);
+            router.push(`/game/${gameId}?playerId=${playerId}`);
         }
     }, [active, router, playerId, gameId]);
 
