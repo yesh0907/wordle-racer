@@ -2,6 +2,8 @@ import Game from "../client/game";
 import { getGameData } from "@/app/actions/get-game-data";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function GamePage({
   params,
   searchParams,
@@ -20,6 +22,7 @@ export default async function GamePage({
   const {word, playerIds} = gameData;
 
   const playerId = searchParams['id'];
+  console.log('search params', searchParams);
 
   // playerId is undefined or string[]
   if (!playerId || Array.isArray(playerId)) {
